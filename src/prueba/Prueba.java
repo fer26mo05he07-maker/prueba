@@ -20,5 +20,5 @@ public class Prueba {
         menu.setVisible(true);
     }
 }
-    
+    // ¿ este es de prueba, dos al mismo tiempo en una clase
 
