@@ -5,7 +5,7 @@
 package pkg_modelo;
 
 /**
- *
+ * Hola soy Arath
  * @author fer26
  */
 public class Disco {
