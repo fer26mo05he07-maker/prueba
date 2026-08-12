@@ -19,7 +19,7 @@ public class VistaRenta extends javax.swing.JFrame {
      */
     public VistaRenta() {
         initComponents();
-         modeloTabla = (DefaultTableModel) tableRenta.getModel();
+         modeloTabla = (DefaultTableModel) tabla.getModel();
     }
 
     /**
@@ -45,7 +45,7 @@ public class VistaRenta extends javax.swing.JFrame {
         txtFecha = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableRenta = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         btnMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -73,7 +73,7 @@ public class VistaRenta extends javax.swing.JFrame {
 
         txtFecha.addActionListener(this::txtFechaActionPerformed);
 
-        tableRenta.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -84,7 +84,7 @@ public class VistaRenta extends javax.swing.JFrame {
                 "ID Renta", "ID Cliente", "ID Disco", "Fecha", "Cantidad"
             }
         ));
-        jScrollPane1.setViewportView(tableRenta);
+        jScrollPane1.setViewportView(tabla);
 
         btnMenu.setText("Regresar al inicio");
         btnMenu.addActionListener(this::btnMenuActionPerformed);
@@ -230,7 +230,7 @@ public class VistaRenta extends javax.swing.JFrame {
     public javax.swing.JLabel lblIdCliente;
     public javax.swing.JLabel lblIdDisco;
     private javax.swing.JLabel lblRegistro;
-    public javax.swing.JTable tableRenta;
+    public javax.swing.JTable tabla;
     public javax.swing.JTextField txtCantidad;
     public javax.swing.JTextField txtFecha;
     public javax.swing.JTextField txtIdCliente;

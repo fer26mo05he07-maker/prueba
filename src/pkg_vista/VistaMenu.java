@@ -59,23 +59,23 @@ public class VistaMenu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(144, 144, 144)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnRenta)
                     .addComponent(btnDisco)
                     .addComponent(btnCliente))
-                .addContainerGap(297, Short.MAX_VALUE))
+                .addContainerGap(184, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
+                .addGap(82, 82, 82)
                 .addComponent(btnCliente)
-                .addGap(27, 27, 27)
+                .addGap(29, 29, 29)
                 .addComponent(btnDisco)
-                .addGap(30, 30, 30)
+                .addGap(31, 31, 31)
                 .addComponent(btnRenta)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         pack();

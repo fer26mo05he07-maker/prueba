@@ -7,9 +7,9 @@ package pkg_controlador;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import pkg_modelo.DAORenta;
-import pkg_modelo.Renta;
+import pkg_modelo.*;
 import pkg_vista.VistaMenu;
-import pkg_vista.VistaRenta;
+import pkg_vista.*;
 
 /**
  *
@@ -25,14 +25,15 @@ public class ControlRenta {
         this.vista = vista;
         this.dao = new DAORenta();
 
-        vista.btnGuardar.addActionListener(e -> guardarDatos());
-        vista.btnConsultar.addActionListener(e -> consultarDatos());
-        vista.btnActualizar.addActionListener(e -> actualizarDatos());
-        vista.btnEliminar.addActionListener(e -> eliminarDatos());
+        this.vista.btnGuardar.addActionListener(e -> guardarDatos());
+        this.vista.btnConsultar.addActionListener(e -> consultarDatos());
+        this.vista.btnActualizar.addActionListener(e -> actualizarDatos());
+        this.vista.btnEliminar.addActionListener(e -> eliminarDatos());
+       this.vista.btnMenu.addActionListener(e -> regresarMenu());
 
-        vista.tabla.getSelectionModel().addListSelectionListener(e -> seleccionarDatos());
     }
 
+    // GUARDAR RENTA
     public void guardarDatos() {
 
         try {
@@ -51,57 +52,19 @@ public class ControlRenta {
                     vista.txtCantidad.getText().trim()
             );
 
-            DAODisco daoDisco = new DAODisco();
+            Renta r = new Renta();
 
-            Disco disco = daoDisco.buscarPorId(idDisco);
-
-            if (disco == null) {
-
-                JOptionPane.showMessageDialog(
-                        vista,
-                        "El disco no existe."
-                );
-
-                return;
-            }
-
-            if (cantidad <= 0) {
-
-                JOptionPane.showMessageDialog(
-                        vista,
-                        "La cantidad debe ser mayor a cero."
-                );
-
-                return;
-            }
-
-            if (cantidad > disco.getExistencia()) {
-
-                throw new SinExistencia(
-                        "No hay suficientes discos disponibles. "
-                        + "Existencia: " + disco.getExistencia()
-                );
-            }
-
-            Renta r = new Renta(
-                    0,
-                    idCliente,
-                    idDisco,
-                    fecha,
-                    cantidad
-            );
+            r.setIdCliente(idCliente);
+            r.setIdDisco(idDisco);
+            r.setFecha(fecha);
+            r.setCantidad(cantidad);
 
             dao.insertar(r);
 
-            int nuevaExistencia =
-                    disco.getExistencia() - cantidad;
-
-            daoDisco.actualizarExistencia(
-                    idDisco,
-                    nuevaExistencia
-            );
-
-            limpiarDatos();
+            vista.txtIdCliente.setText("");
+            vista.txtIdDisco.setText("");
+            vista.txtFecha.setText("");
+            vista.txtCantidad.setText("");
 
             JOptionPane.showMessageDialog(
                     vista,
@@ -110,29 +73,23 @@ public class ControlRenta {
 
             consultarDatos();
 
-        } catch (SinExistencias ex) {
-
-            JOptionPane.showMessageDialog(
-                    vista,
-                    ex.getMessage()
-            );
-
         } catch (SQLException ex) {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error al guardar: " + ex.getMessage()
+                    "Error: " + ex.getMessage()
             );
 
         } catch (NumberFormatException ex) {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Cliente, disco y cantidad deben ser números."
+                    "Los ID y la cantidad deben ser números."
             );
         }
     }
 
+    // CONSULTAR RENTAS
     public void consultarDatos() {
 
         try {
@@ -152,87 +109,70 @@ public class ControlRenta {
 
         } catch (SQLException ex) {
 
-            JOptionPane.showMessageDialog(
-                    vista,
-                    "Error al consultar: " + ex.getMessage()
-            );
+            JOptionPane.showMessageDialog( vista, "Error: " + ex.getMessage());
         }
     }
 
+    // SELECCIONAR RENTA
     public void seleccionarDatos() {
 
         int fila = vista.tabla.getSelectedRow();
 
         if (fila >= 0) {
 
-            vista.idRentaSeleccionada =
-                    Integer.parseInt(
-                            vista.tabla.getValueAt(fila, 0).toString()
-                    );
+            vista.idSeleccionado =
+                    (int) vista.tabla.getValueAt(fila, 0);
 
-            vista.txtIdCliente.setText(
-                    vista.tabla.getValueAt(fila, 1).toString()
-            );
-
-            vista.txtIdDisco.setText(
-                    vista.tabla.getValueAt(fila, 2).toString()
-            );
-
-            vista.txtFecha.setText(
-                    vista.tabla.getValueAt(fila, 3).toString()
-            );
-
-            vista.txtCantidad.setText(
-                    vista.tabla.getValueAt(fila, 4).toString()
-            );
+            vista.txtIdCliente.setText(vista.tabla.getValueAt(fila, 1).toString());
+            vista.txtIdDisco.setText( vista.tabla.getValueAt(fila, 2).toString());
+            vista.txtFecha.setText(   vista.tabla.getValueAt(fila, 3).toString());
+            /*vista.txtCantidad.setText(  vista.tableRenta.getValueAt(fila, 4).toString();*/
+             this.vista.btnMenu.addActionListener(e -> regresarMenu ());
         }
     }
 
+    // ACTUALIZAR RENTA
     public void actualizarDatos() {
 
         try {
 
-            if (vista.idRentaSeleccionada == -1) {
+            if (vista.idSeleccionado == -1) {
 
-                JOptionPane.showMessageDialog(
-                        vista,
-                        "Selecciona una renta para actualizar."
-                );
-
+                JOptionPane.showMessageDialog( vista,   "Selecciona una renta." );
                 return;
             }
 
-            int idCliente = Integer.parseInt(
-                    vista.txtIdCliente.getText().trim()
+            Renta r = new Renta();
+
+            r.setIdRenta(vista.idSeleccionado);
+
+            r.setIdCliente(
+                    Integer.parseInt(
+                            vista.txtIdCliente.getText().trim()
+                    )
             );
 
-            int idDisco = Integer.parseInt(
-                    vista.txtIdDisco.getText().trim()
+            r.setIdDisco(
+                    Integer.parseInt(
+                            vista.txtIdDisco.getText().trim()
+                    )
             );
 
-            String fecha = vista.txtFecha.getText().trim();
-
-            int cantidad = Integer.parseInt(
-                    vista.txtCantidad.getText().trim()
+            r.setFecha(
+                    vista.txtFecha.getText().trim()
             );
 
-            Renta r = new Renta(
-                    vista.idRentaSeleccionada,
-                    idCliente,
-                    idDisco,
-                    fecha,
-                    cantidad
+            r.setCantidad(
+                    Integer.parseInt(
+                            vista.txtCantidad.getText().trim()
+                    )
             );
 
             dao.actualizar(r);
 
-            limpiarDatos();
-
-            vista.idRentaSeleccionada = -1;
-
             JOptionPane.showMessageDialog(
                     vista,
-                    "Renta actualizada."
+                    "Renta actualizada correctamente."
             );
 
             consultarDatos();
@@ -241,72 +181,47 @@ public class ControlRenta {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error al actualizar: " + ex.getMessage()
+                    "Error: " + ex.getMessage()
             );
 
         } catch (NumberFormatException ex) {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Cliente, disco y cantidad deben ser números."
+                    "Los ID y la cantidad deben ser números."
             );
         }
     }
 
+    // ELIMINAR RENTA
     public void eliminarDatos() {
 
         try {
 
-            if (vista.idRentaSeleccionada == -1) {
-
-                JOptionPane.showMessageDialog(
-                        vista,
-                        "Selecciona una renta para eliminar."
+            if (vista.idSeleccionado == -1) {
+                JOptionPane.showMessageDialog( vista, "Selecciona una renta."
                 );
 
                 return;
             }
 
-            int confirmacion = JOptionPane.showConfirmDialog(
+            dao.eliminar(vista.idSeleccionado);
+
+            JOptionPane.showMessageDialog(
                     vista,
-                    "¿Estás seguro de eliminar esta renta?",
-                    "Confirmar",
-                    JOptionPane.YES_NO_OPTION
+                    "Renta eliminada correctamente."
             );
 
-            if (confirmacion == JOptionPane.YES_OPTION) {
-
-                dao.eliminar(vista.idRentaSeleccionada);
-
-                vista.idRentaSeleccionada = -1;
-
-                limpiarDatos();
-
-                JOptionPane.showMessageDialog(
-                        vista,
-                        "Renta eliminada."
-                );
-
-                consultarDatos();
-            }
+            consultarDatos();
 
         } catch (SQLException ex) {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error al eliminar: " + ex.getMessage()
+                    "Error: " + ex.getMessage()
             );
         }
     }
-
-    public void limpiarDatos() {
-
-        vista.txtIdCliente.setText("");
-        vista.txtIdDisco.setText("");
-        vista.txtFecha.setText("");
-        vista.txtCantidad.setText("");
-    }
-    
      public void regresarMenu(){
             VistaMenu menu = new VistaMenu();
     menu.setVisible(true);

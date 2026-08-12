@@ -4,8 +4,8 @@
  */
 package prueba;
 
-import pkg_controlador.ControlCliente;
-import pkg_vista.VistaCliente;
+import pkg_controlador.*;
+import pkg_vista.VistaMenu;
 
 /**
  *
@@ -13,18 +13,11 @@ import pkg_vista.VistaCliente;
  */
 public class Prueba {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+ public static void main(String[] args) {
 
-        // TODO code application logic here
-        
-    VistaCliente vista = new VistaCliente();
+        VistaMenu menu = new VistaMenu();
 
-    ControlCliente controlador = new ControlCliente(vista);
-
-    vista.setVisible(true);
+        menu.setVisible(true);
     }
 }
     
