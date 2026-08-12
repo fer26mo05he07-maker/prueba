@@ -4,6 +4,9 @@
  */
 package prueba;
 
+import pkg_controlador.ControlCliente;
+import pkg_vista.VistaCliente;
+
 /**
  *
  * @author fer26
@@ -14,7 +17,15 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
         // TODO code application logic here
+        
+    VistaCliente vista = new VistaCliente();
+
+    ControlCliente controlador = new ControlCliente(vista);
+
+    vista.setVisible(true);
     }
-    
 }
+    
+

@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import pkg_vista.VistaCliente;
 import pkg_modelo.*;
 import pkg_modelo.ReglaClienteException;
+import pkg_vista.VistaMenu;
 /**
  *
  * @author Arath
@@ -27,6 +28,8 @@ public class ControlCliente {
         this.vista.btnEliminar.addActionListener(e -> eliminarDatos());
         this.vista.btnActualizar.addActionListener(e -> actualizarDatos());
         this.vista.tabla.getSelectionModel().addListSelectionListener(e -> seleccionarDatos());
+        this.vista.btnRegresar.addActionListener(e -> regresarMenu());
+        
     }
 
     public void guardarDatos(){
@@ -168,5 +171,10 @@ public class ControlCliente {
         vista.txtNombre.setText("");
         vista.txtTelefono.setText("");
         vista.txtCorreo.setText("");
+    }
+      public void regresarMenu(){
+            VistaMenu menu = new VistaMenu();
+    menu.setVisible(true);
+    vista.dispose();
     }
 }

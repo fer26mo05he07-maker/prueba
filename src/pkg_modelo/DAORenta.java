@@ -5,42 +5,40 @@
 package pkg_modelo;
 import java.sql.*;
 import java.util.ArrayList;
-
 /**
  *
- * @author fer26
+ * @author Arath
  */
-
-public class DAODisco {
+public class DAORenta {
 
     private final String URL = "jdbc:mysql://localhost:3306/renta_discos";
     private final String USER = "root";
     private final String PASS = "root";
 
-    // INSERTAR DISCO
-    public void insertar(Disco d) throws SQLException {
+    // INSERTAR RENTA
+    public void insertar(Renta r) throws SQLException {
 
-        String sql = "INSERT INTO disco(titulo, genero, precioRenta, existencia) "
+        String sql = "INSERT INTO renta(idCliente, idDisco, fecha, cantidad) "
                 + "VALUES (?,?,?,?)";
 
         try(Connection conn = DriverManager.getConnection(URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, d.getTitulo());
-            stmt.setString(2, d.getGenero());
-            stmt.setDouble(3, d.getPrecioRenta());
-            stmt.setInt(4, d.getExistencia());
+            stmt.setInt(1, r.getIdCliente());
+            stmt.setInt(2, r.getIdDisco());
+            stmt.setString(3, r.getFecha());
+            stmt.setInt(4, r.getCantidad());
 
             stmt.executeUpdate();
         }
     }
 
-    // CONSULTAR DISCOS
-    public ArrayList<Disco> consultar() throws SQLException {
+    // CONSULTAR RENTAS
+    public ArrayList<Renta> consultar() throws SQLException {
 
-        ArrayList<Disco> lista = new ArrayList<>();
+        ArrayList<Renta> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM disco";
+        String sql = "SELECT * FROM renta";
 
         try(Connection conn = DriverManager.getConnection(URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -49,25 +47,25 @@ public class DAODisco {
 
             while(rs.next()) {
 
-                Disco d = new Disco();
+                Renta r = new Renta();
 
-                d.setIdDisco(rs.getInt("idDisco"));
-                d.setTitulo(rs.getString("titulo"));
-                d.setGenero(rs.getString("genero"));
-                d.setPrecioRenta(rs.getDouble("precioRenta"));
-                d.setExistencia(rs.getInt("existencia"));
+                r.setIdRenta(rs.getInt("idRenta"));
+                r.setIdCliente(rs.getInt("idCliente"));
+                r.setIdDisco(rs.getInt("idDisco"));
+                r.setFecha(rs.getString("fecha"));
+                r.setCantidad(rs.getInt("cantidad"));
 
-                lista.add(d);
+                lista.add(r);
             }
         }
 
         return lista;
     }
 
-    // ELIMINAR DISCO
+    // ELIMINAR RENTA
     public void eliminar(int id) throws SQLException {
 
-        String sql = "DELETE FROM disco WHERE idDisco=?";
+        String sql = "DELETE FROM renta WHERE idRenta=?";
 
         try(Connection conn = DriverManager.getConnection(URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -78,23 +76,22 @@ public class DAODisco {
         }
     }
 
-    // ACTUALIZAR DISCO
-    public void actualizar(Disco d) throws SQLException {
+    // ACTUALIZAR RENTA
+    public void actualizar(Renta r) throws SQLException {
 
-        String sql = "UPDATE disco SET titulo=?, genero=?, precioRenta=?, "
-                + "existencia=? WHERE idDisco=?";
+        String sql = "UPDATE renta SET idCliente=?, idDisco=?, "
+                + "fecha=?, cantidad=? WHERE idRenta=?";
 
         try(Connection conn = DriverManager.getConnection(URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, d.getTitulo());
-            stmt.setString(2, d.getGenero());
-            stmt.setDouble(3, d.getPrecioRenta());
-            stmt.setInt(4, d.getExistencia());
-            stmt.setInt(5, d.getIdDisco());
+            stmt.setInt(1, r.getIdCliente());
+            stmt.setInt(2, r.getIdDisco());
+            stmt.setString(3, r.getFecha());
+            stmt.setInt(4, r.getCantidad());
+            stmt.setInt(5, r.getIdRenta());
 
             stmt.executeUpdate();
         }
-        
     }
 }
