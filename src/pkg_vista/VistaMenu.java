@@ -75,7 +75,7 @@ public class VistaMenu extends javax.swing.JFrame {
                 .addComponent(btnDisco)
                 .addGap(31, 31, 31)
                 .addComponent(btnRenta)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         pack();

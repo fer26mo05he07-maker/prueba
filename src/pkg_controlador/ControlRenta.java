@@ -29,11 +29,12 @@ public class ControlRenta {
         this.vista.btnConsultar.addActionListener(e -> consultarDatos());
         this.vista.btnActualizar.addActionListener(e -> actualizarDatos());
         this.vista.btnEliminar.addActionListener(e -> eliminarDatos());
-       this.vista.btnMenu.addActionListener(e -> regresarMenu());
-
+        this.vista.btnMenu.addActionListener(e -> regresarMenu());
     }
 
+    // ==============================
     // GUARDAR RENTA
+    // ==============================
     public void guardarDatos() {
 
         try {
@@ -59,8 +60,11 @@ public class ControlRenta {
             r.setFecha(fecha);
             r.setCantidad(cantidad);
 
+            // AQUÍ SE GUARDA LA RENTA
+            // Y SE COMPRUEBAN LAS EXISTENCIAS
             dao.insertar(r);
 
+            // Limpiar campos
             vista.txtIdCliente.setText("");
             vista.txtIdDisco.setText("");
             vista.txtFecha.setText("");
@@ -73,23 +77,41 @@ public class ControlRenta {
 
             consultarDatos();
 
-        } catch (SQLException ex) {
+        } catch (SinExistencia ex) {
 
+            // ERROR POR FALTA DE EXISTENCIAS
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error: " + ex.getMessage()
+                    "Error de renta:\n" + ex.getMessage(),
+                    "Falta de existencias",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        } catch (SQLException ex) {
+
+            // ERROR DE BASE DE DATOS
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "Error de base de datos:\n" + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
 
         } catch (NumberFormatException ex) {
 
+            // ERROR CUANDO ESCRIBEN LETRAS EN ID O CANTIDAD
             JOptionPane.showMessageDialog(
                     vista,
-                    "Los ID y la cantidad deben ser números."
+                    "Los ID y la cantidad deben ser números.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
         }
     }
 
+    // ==============================
     // CONSULTAR RENTAS
+    // ==============================
     public void consultarDatos() {
 
         try {
@@ -109,11 +131,18 @@ public class ControlRenta {
 
         } catch (SQLException ex) {
 
-            JOptionPane.showMessageDialog( vista, "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(
+                    vista,
+                    "Error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
+    // ==============================
     // SELECCIONAR RENTA
+    // ==============================
     public void seleccionarDatos() {
 
         int fila = vista.tabla.getSelectedRow();
@@ -123,22 +152,40 @@ public class ControlRenta {
             vista.idSeleccionado =
                     (int) vista.tabla.getValueAt(fila, 0);
 
-            vista.txtIdCliente.setText(vista.tabla.getValueAt(fila, 1).toString());
-            vista.txtIdDisco.setText( vista.tabla.getValueAt(fila, 2).toString());
-            vista.txtFecha.setText(   vista.tabla.getValueAt(fila, 3).toString());
-            /*vista.txtCantidad.setText(  vista.tableRenta.getValueAt(fila, 4).toString();*/
-             this.vista.btnMenu.addActionListener(e -> regresarMenu ());
+            vista.txtIdCliente.setText(
+                    vista.tabla.getValueAt(fila, 1).toString()
+            );
+
+            vista.txtIdDisco.setText(
+                    vista.tabla.getValueAt(fila, 2).toString()
+            );
+
+            vista.txtFecha.setText(
+                    vista.tabla.getValueAt(fila, 3).toString()
+            );
+
+            vista.txtCantidad.setText(
+                    vista.tabla.getValueAt(fila, 4).toString()
+            );
         }
     }
 
+    // ==============================
     // ACTUALIZAR RENTA
+    // ==============================
     public void actualizarDatos() {
 
         try {
 
             if (vista.idSeleccionado == -1) {
 
-                JOptionPane.showMessageDialog( vista,   "Selecciona una renta." );
+                JOptionPane.showMessageDialog(
+                        vista,
+                        "Selecciona una renta.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE
+                );
+
                 return;
             }
 
@@ -181,25 +228,36 @@ public class ControlRenta {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error: " + ex.getMessage()
+                    "Error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
 
         } catch (NumberFormatException ex) {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Los ID y la cantidad deben ser números."
+                    "Los ID y la cantidad deben ser números.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
         }
     }
 
+    // ==============================
     // ELIMINAR RENTA
+    // ==============================
     public void eliminarDatos() {
 
         try {
 
             if (vista.idSeleccionado == -1) {
-                JOptionPane.showMessageDialog( vista, "Selecciona una renta."
+
+                JOptionPane.showMessageDialog(
+                        vista,
+                        "Selecciona una renta.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE
                 );
 
                 return;
@@ -218,13 +276,22 @@ public class ControlRenta {
 
             JOptionPane.showMessageDialog(
                     vista,
-                    "Error: " + ex.getMessage()
+                    "Error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
         }
     }
-     public void regresarMenu(){
-            VistaMenu menu = new VistaMenu();
-    menu.setVisible(true);
-    vista.dispose();
+
+    // ==============================
+    // REGRESAR AL MENÚ
+    // ==============================
+    public void regresarMenu() {
+
+        VistaMenu menu = new VistaMenu();
+
+        menu.setVisible(true);
+
+        vista.dispose();
     }
 }
